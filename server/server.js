@@ -1,3 +1,5 @@
+require('./config/config');
+
 const express=require('express');
 const bodyParser=require('body-parser');
 const {ObjectID}=require('mongodb');
@@ -8,7 +10,7 @@ const {Todo}=require('./models/todo');
 const {User}=require('./models/user');
 
 var app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
@@ -85,6 +87,27 @@ app.patch('/todos/:id', (req ,res)=>{
         }
         res.send({todo});
     }).catch((e)=> res.status(400).send());
+});
+
+app.post('/users', (req,res)=>{
+    var body = _.pick(req.body, ['email','password']);
+    var user= new User(body);
+
+// -----------
+    user.generateAuthToken().then((token)=>{
+        res.header('x-auth', token).send(user);
+    }).catch((e)=> res.status(400).send(e));
+//above used insted of below------------
+
+    // user.save().then(()=>{
+        
+    //     return user.generateAuthToken();
+    // })
+    // .then((token)=>{
+    //     res.header('x-auth', token).send(user);
+    // })
+    // .catch((e)=> res.status(400).send(e));
+
 });
 
 app.listen(port,()=>{
