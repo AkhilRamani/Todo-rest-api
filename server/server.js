@@ -110,13 +110,13 @@ app.post('/users', (req,res)=>{
 
 });
 
-app.post('/users/me',authenticate ,(req,res)=>{
+app.get('/users/me',authenticate ,(req,res)=>{
     res.send(req.user);
 });
 
 
 app.listen(port,()=>{
-    console.log(`Started ip at port ${port}`);
+    console.log(`Started up at port ${port}`);
 });
 
 module.exports = {app};
