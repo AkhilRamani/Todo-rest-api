@@ -60,6 +60,16 @@ UserSchema.methods.generateAuthToken = function(){
     });
 };
 
+UserSchema.methods.removeToken = function(token){
+    var user= this;
+//$pull- mongodb operator
+    return user.updateOne({
+        $pull:{
+            tokens: {token}
+        }
+    });
+};
+
 UserSchema.methods.toJSON = function(){
     var user = this;
     var userObject = user.toObject();
